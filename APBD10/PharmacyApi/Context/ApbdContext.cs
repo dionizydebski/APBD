@@ -9,8 +9,7 @@ public partial class ApbdContext : DbContext
     {
     }
 
-    public ApbdContext(DbContextOptions<ApbdContext> options)
-        : base(options)
+    public ApbdContext(DbContextOptions<ApbdContext> options) : base(options)
     {
     }
     
@@ -31,15 +30,15 @@ public partial class ApbdContext : DbContext
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
         base.OnModelCreating(modelBuilder);
-
+    
         modelBuilder.Entity<Prescription_Medicament>()
             .HasKey(pm => new { pm.IdPrescription, pm.IdMedicament });
-
+        
         modelBuilder.Entity<Prescription_Medicament>()
             .HasOne(pm => pm.Prescriptions)
             .WithMany(p => p.PrescriptionMedicaments)
             .HasForeignKey(pm => pm.IdPrescription);
-
+        
         modelBuilder.Entity<Prescription_Medicament>()
             .HasOne(pm => pm.Medicaments)
             .WithMany(m => m.PrescriptionMedicaments)
