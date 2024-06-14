@@ -1,4 +1,5 @@
 ﻿using PharmacyApi.DTOs;
+using PharmacyApi.Models;
 
 namespace PharmacyApi.Repositories;
 
@@ -14,4 +15,8 @@ public interface IPharmacyRepository
     Task<Errors> AddPrescriptionMedicament(PrescriptionMedicamentDTO prescriptionMedicamentDto);
     
     Task<PatientDataDTO> GetPatientData(int IdPatient);
+    
+    Task<Errors> AddUser(RegisterRequest model);
+    Task<TokenResponse> LoginUser(LoginRequest loginRequest); 
+    Task<TokenResponse> RefreshUser(RefreshTokenRequest refreshToken); 
 }

@@ -1,5 +1,12 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using System.IdentityModel.Tokens.Jwt;
+using System.Security.Claims;
+using System.Text;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.IdentityModel.Tokens;
 using PharmacyApi.DTOs;
+using PharmacyApi.Helpers;
+using PharmacyApi.Models;
 using PharmacyApi.Services;
 
 namespace PharmacyApi.Controllers;
@@ -33,6 +40,37 @@ public class PharmacyController : ControllerBase
     [HttpGet("{idPatient:int}")]
     public async Task<IActionResult> GetPatientData(int idPatient)
     {
+        // throw new Exception("Cos złego");
         return Ok(await _pharmacyService.GetPatientData(idPatient));
+    }
+    
+    [AllowAnonymous]
+    [HttpPost("register")]
+    public async Task<IActionResult> Register(RegisterRequest model)
+    {
+        var result = await _pharmacyService.RegisterUser(model);
+
+        return Ok();
+    }
+
+    [AllowAnonymous]
+    [HttpPost("login")]
+    public async Task<IActionResult> Login(LoginRequest loginRequest)
+    {
+        var result = await _pharmacyService.LoginUser(loginRequest);
+
+        if (result == null)
+            return Unauthorized();
+
+        return Ok(result);
+    }
+    
+    [Authorize(AuthenticationSchemes = "IgnoreTokenExpirationScheme")]
+    [HttpPost("refresh")]
+    public async Task<IActionResult> Refresh(RefreshTokenRequest refreshToken)
+    {
+        var result = await _pharmacyService.RefreshUser(refreshToken);
+
+        return Ok(result);
     }
 }

@@ -1,4 +1,6 @@
 ﻿using PharmacyApi.DTOs;
+using PharmacyApi.Helpers;
+using PharmacyApi.Models;
 using PharmacyApi.Repositories;
 
 namespace PharmacyApi.Services;
@@ -49,5 +51,22 @@ public class PharmacyService : IPharmacyService
     public async Task<PatientDataDTO> GetPatientData(int IdPatient)
     {
         return await _pharmacyRepository.GetPatientData(IdPatient);
+    }
+
+    public async Task<Errors> RegisterUser(RegisterRequest model)
+    {
+        var result = await _pharmacyRepository.AddUser(model);
+        
+        return Errors.Good;
+    }
+
+    public async Task<TokenResponse> LoginUser(LoginRequest loginRequest)
+    {
+        return await _pharmacyRepository.LoginUser(loginRequest);
+    }
+
+    public async Task<TokenResponse> RefreshUser(RefreshTokenRequest refreshToken)
+    {
+        return await _pharmacyRepository.RefreshUser(refreshToken);
     }
 }
